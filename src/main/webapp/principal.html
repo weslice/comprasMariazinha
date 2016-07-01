@@ -3,14 +3,14 @@
     <head>
         <title>Mariazinha em: Compras</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.css">
-        <link rel="stylesheet" href="resources/bootstrap/css/lista-compras.css">
-        <!--script src="lib/angular-1.0.1.js"></script-->
-        <!--script src="app/lista-compras.js"></script-->
+        <link rel="stylesheet" href="res/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="res/bootstrap/css/lista-compras.css">
+        <script src="res/bootstrap/js/angular.min.js"></script>
+        <script src="res/bootstrap/js/loja.js"></script>
     </head>
-            <title>Mariazinha em: Compras</title>
+            <title>Compras de Maria</title>
     </head>
-    <body>
+    <body ng-app="Compras">
     <div class="container" align="center">
         
         <div class="row">
@@ -21,9 +21,9 @@
         
         <div class="row">
             <form class="form-inline" name="formPrincipal">
-                <input type="button" class="btn btn-primary" onclick="location.href='lista.jsp';" value="Listas de Compras"/>
+                <input type="button" class="btn btn-primary" onclick="location.href='lista.html';" value="Listas de Compras"/>
                 <br><br>
-                <input type="button" class="btn btn-primary" onclick="location.href='produtos.jsp';" value="Produtos"/>
+                <input type="button" class="btn btn-primary" onclick="location.href='produtos.html';" value="Produtos"/>
                 
             </form>
         </div>

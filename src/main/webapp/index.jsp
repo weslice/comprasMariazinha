@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="res/bootstrap/css/bootstrap.css">
         <title>Mariazinha em: Compras</title>
     </head>
     <body>

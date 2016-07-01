@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="Produtos">
+    <head>
+        <title>Produtos</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="res/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="res/bootstrap/css/lista-compras.css">
+        <link rel="stylesheet" href="res/bootstrap/css/gh-buttons.css">
+        <script src="res/bootstrap/js/angular.min.js"></script>
+        <script src="res/bootstrap/js/loja.js"></script>
+    </head>
+    <body>
+        <div class="container" align="center" ng-controller="ProdutosController as controller">
+
+            <div class="row">
+                <div class="page-header">
+                    <h1>Produtos</h1>
+                </div>
+            </div>
+
+            <!--Caso o produto não existir/estiver disponivel, não ira exibir a div -->
+            <div class="row"  style="border: 1px solid black;"  ng-show="controller.produto"> 
+                <br><br>
+                <label for="nomeProduto">Nome do Produto:</label>
+                <input type="text" placeholder="Nome do Produto" id="nomeProduto" ng-model="controller.produto.nomeProduto"><br>
+                
+                <label for="Valor">Valor do Produto:</label>
+                <input type="text" placeholder="Valor do Produto" id="Valor" ng-model="controller.produto.valor"><br>
+                <br><br>
+                <button type="button"  class="button  icon approve" data-ng-click="controller.adicionaProduto()">Salvar</button>
+                <button type="button"  class="button" data-ng-click="controller.produto = undefined">Cancelar</button>
+                <br><br>
+            </div>    
+            
+            <!--Caso o produto no controller estiver definido ira exibir a div-->
+            <div style="border: 1px solid black;" data-ng-show="!controller.produto">
+                <table id="lista-produtos" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Imagem</th>
+                            <th>Produto</th>
+                            <th>Valor</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="produto in controller.produtos" class="comprado-{{ produto.comprado }}">
+                            <td><input type="checkbox" ng-model="item.comprado"></td>
+                            <td><strong>{{ produto.nomeProduto }}</strong></td>
+                            <td>{{ produto.valor }}</td>
+                            <td><a href="#button" class="button edit icon edit"
+                                   data-ng-click="controller.alterar(produto)" >Alterar</a></td>
+                            <td><a href="#button" class="button danger icon remove"
+                                   data-ng-click="controller.excluir(produto)" >Remover</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <button class="button icon home" onclick="location.href='principal.html';" >Ínicio</button>
+                <button class="button add icon add" ng-click="controller.novo()">Adicionar Produtos</button>
+                <br><br>
+            </div>
+            
+        </div>
+    </body>
+</html>

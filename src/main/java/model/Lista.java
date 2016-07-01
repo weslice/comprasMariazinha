@@ -23,6 +23,32 @@ public class Lista {
         this.situacao = situacao;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + this.codLista;
+        hash = 29 * hash + this.codProduto;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Lista other = (Lista) obj;
+        if (this.codLista != other.codLista) {
+            return false;
+        }
+        if (this.codProduto != other.codProduto) {
+            return false;
+        }
+        return true;
+    }
+
     public int getCodLista() {
         return codLista;
     }
@@ -63,6 +89,11 @@ public class Lista {
         this.valorTotal = valorTotal;
     }
 
+    @Override
+    public String toString() {
+        return "Lista{" + "codLista=" + codLista + ", nomeLista=" + nomeLista + ", codProduto=" + codProduto + ", quantidadeProd=" + quantidadeProd + ", valorTotal=" + valorTotal + ", situacao=" + situacao + '}';
+    }
+
     public int getSituacao() {
         return situacao;
     }
@@ -70,6 +101,7 @@ public class Lista {
     public void setSituacao(int situacao) {
         this.situacao = situacao;
     }
+    
     
     
     
