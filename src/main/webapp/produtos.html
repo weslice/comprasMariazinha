@@ -6,8 +6,18 @@
         <link rel="stylesheet" href="res/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" href="res/bootstrap/css/lista-compras.css">
         <link rel="stylesheet" href="res/bootstrap/css/gh-buttons.css">
+        <script src="res/bootstrap/js/jquery-2.1.4.min.js"></script>
+
+        <!-- Documentação do Datatable http://l-lin.github.io/angular-datatables/archives/v0.4.x/#/angularWay -->
+        <script src="res/bootstrap/js/jquery.dataTables.min.js"></script>
+        <link href="http://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" />
+
         <script src="res/bootstrap/js/angular.min.js"></script>
-        <script src="res/bootstrap/js/loja.js"></script>
+        <script src="res/bootstrap/js/angular-datatables.min.js"></script>
+        <!-- Deixar por Ultimo o produtos.js-->
+        <script src="res/bootstrap/js/produtos.js"></script>
+
+
     </head>
     <body>
         <div class="container" align="center" ng-controller="ProdutosController as controller">
@@ -18,50 +28,67 @@
                 </div>
             </div>
 
+            <div class-row>
+                <button class="button icon home" onclick="location.href='principal.html';" >Ínicio</button>
+                <button class="button add icon add" ng-click="controller.novo()">Adicionar Produtos</button>
+                <br><br>
+            </div>
+
             <!--Caso o produto não existir/estiver disponivel, não ira exibir a div -->
-            <div class="row"  style="border: 1px solid black;"  ng-show="controller.produto"> 
+            <div style="border: 1px solid black;"  ng-show="controller.produto"> 
+                <h2>Adicionando um novo Produto</h2>
                 <br><br>
-                <label for="nomeProduto">Nome do Produto:</label>
-                <input type="text" placeholder="Nome do Produto" id="nomeProduto" ng-model="controller.produto.nomeProduto"><br>
-                
-                <label for="Valor">Valor do Produto:</label>
-                <input type="text" placeholder="Valor do Produto" id="Valor" ng-model="controller.produto.valor"><br>
-                <br><br>
-                <button type="button"  class="button  icon approve" data-ng-click="controller.adicionaProduto()">Salvar</button>
-                <button type="button"  class="button" data-ng-click="controller.produto = undefined">Cancelar</button>
-                <br><br>
+
+                <form name="formNovoProd" ng-submit="submitForm()" novalidate>
+                    <!--Validação do formulario-->
+
+                    <div class="form-group" ng-class="{ 'has-error' : formNovoProd.nome.$invalid && !formNovoProd.nome.$pristine }">
+                        <label for="nomeProduto">Nome do Produto:</label>
+                        <input type="text" name="nome" class="form-group" placeholder="Nome do Produto" id="nomeProduto" ng-model="controller.produto.nomeProduto" required>
+                        <p ng-show="formNovoProd.nome.$invalid && !formNovoProd.nome.$pristine" class="help-block">Produto é obrigatório</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Valor">Valor do Produto:</label>
+                        <input type="number" class="form-group" placeholder="Valor do Produto" id="Valor" ng-model="controller.produto.valor" required>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit"  class="button  icon approve"  data-ng-click="controller.adicionaProduto()">Salvar</button>
+                        <button type="button"  class="button"  data-ng-click="controller.produto = undefined">Cancelar</button>
+                    </div>
+                </form>
             </div>    
-            
+
             <!--Caso o produto no controller estiver definido ira exibir a div-->
-            <div style="border: 1px solid black;" data-ng-show="!controller.produto">
-                <table id="lista-produtos" class="table table-striped">
+            <div style="border: 1px solid black;" data-ng-show="!controller.produto"  class="table-responsive">
+                <table id="lista-produtos" datatable="ng" class="table table-striped" >
                     <thead>
                         <tr>
                             <th>Imagem</th>
                             <th>Produto</th>
                             <th>Valor</th>
-                            <th></th>
-                            <th></th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="produto in controller.produtos" class="comprado-{{ produto.comprado }}">
-                            <td><input type="checkbox" ng-model="item.comprado"></td>
+                        <tr ng-repeat="produto in controller.produtos">
+                            <td></td>
                             <td><strong>{{ produto.nomeProduto }}</strong></td>
-                            <td>{{ produto.valor }}</td>
-                            <td><a href="#button" class="button edit icon edit"
-                                   data-ng-click="controller.alterar(produto)" >Alterar</a></td>
-                            <td><a href="#button" class="button danger icon remove"
+                            <td align="left">R$: {{ produto.valor }}</td>
+                            <td align="center"><a href="#button" class="button edit icon edit"
+                                                  data-ng-click="controller.alterar(produto)" >Alterar</a>
+                                <a href="#button" class="button danger icon remove"
                                    data-ng-click="controller.excluir(produto)" >Remover</a></td>
                         </tr>
                     </tbody>
                 </table>
+                <h4>Total de Produtos: {{ controller.produtos.length}}</h4>
                 <br>
-                <button class="button icon home" onclick="location.href='principal.html';" >Ínicio</button>
-                <button class="button add icon add" ng-click="controller.novo()">Adicionar Produtos</button>
-                <br><br>
+                <select  class="form-control" ng-model="produto" ng-options="produto.nomeProduto for produto in controller.produtos track by produto.codProduto"></select>
             </div>
-            
+
         </div>
     </body>
+
 </html>

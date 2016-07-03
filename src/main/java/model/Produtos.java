@@ -1,12 +1,15 @@
 package model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
- * Classe Model que ira instânciar Produtos
- * Tabela No BD - produto
+ * Classe Model que ira instânciar Produtos Tabela No BD - produto
+ *
  * @author Wes
  */
+@XmlRootElement
 public class Produtos {
-    
+
     private int codProduto;
     private String nomeProduto;
     private double valor;
@@ -18,7 +21,11 @@ public class Produtos {
         this.nomeProduto = nomeProduto;
         this.valor = valor;
     }
-    
+
+    //Construtor Vazio
+    public Produtos() {
+    }
+
     public int getCodProduto() {
         return codProduto;
     }
@@ -28,7 +35,11 @@ public class Produtos {
     }
 
     public String getNomeProduto() {
-        return nomeProduto;
+        if (null == this.nomeProduto) {
+            return "";
+        } else {
+            return this.nomeProduto;
+        }
     }
 
     public void setNomeProduto(String nomeProduto) {
@@ -44,7 +55,11 @@ public class Produtos {
     }
 
     public String getImagem() {
-        return imagem;
+        if (null == this.imagem) {
+            return "";
+        } else {
+            return this.imagem;
+        }
     }
 
     public void setImagem(String imagem) {
@@ -77,5 +92,4 @@ public class Produtos {
     public String toString() {
         return "Produtos{" + "codProduto=" + codProduto + ", nomeProduto=" + nomeProduto + ", valor=" + valor + ", imagem=" + imagem + '}';
     }
-    
 }

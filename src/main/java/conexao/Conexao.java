@@ -10,13 +10,14 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Classe responsavel por conectar ao banco de dados
  * @author Wes
  */
 public class Conexao {
 
     //caminho do banco de dados
-    final String url = "jdbc:mysql://localhost:3306/mydb";
+    //final String url = "jdbc:mysql://localhost:3306/mydb";
+    final String url = "jdbc:mysql://localhost:3306/mydb?zeroDateTimeBehavior=convertToNull";
     //usuario do Banco de Dados
     final String usuario = "admin";
     //senha do Usuario do Banco de Dados

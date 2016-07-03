@@ -1,10 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="Lista">
     <head>
-        <title></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+       	<title>Lista de compras com AngularJS</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="res/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="res/bootstrap/css/lista-compras.css">
+        <link rel="stylesheet" href="res/bootstrap/css/gh-buttons.css">
+        <script src="res/bootstrap/js/jquery-2.1.4.min.js"></script>
+
+        <!-- Documentação do Datatable http://l-lin.github.io/angular-datatables/archives/v0.4.x/#/angularWay -->
+        <script src="res/bootstrap/js/jquery.dataTables.min.js"></script>
+        <link href="http://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+        <script src="res/bootstrap/js/angular.min.js"></script>
+        <script src="res/bootstrap/js/angular-datatables.min.js"></script>
+        <!-- Deixar por Ultimo o js do angular-->
+        <script src="res/bootstrap/js/lista-compras.js"></script>
     </head>
     <body>
-        <div>TODO write content</div>
+        <div class="container" ng-controller="ListaComprasController as controller">
+            <div class="row">
+                <div class="page-header">
+                    <h1>Lista</h1>
+                </div>
+            </div>
+            
+            <div class-row>
+                <button class="button icon home" onclick="location.href='principal.html';" >Ínicio</button>
+                <button class="button add icon add" ng-click="controller.novo()">Nova Lista</button>
+                <br><br>
+            </div>
+
+            <div class="row">
+                <table id="lista-compras" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Comprado?</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in itens" class="comprado-{{ item.comprado }}">
+                            <td><input type="checkbox" ng-model="item.comprado"></td>
+                            <td><strong>{{ item.produto }}</strong></td>
+                            <td>{{ item.quantidade }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <form class="form-inline" name="formItem">
+                    <select  class="form-control" ng-model="produto" ng-options="produto.nomeProduto for produto in controller.produtos track by produto.codProduto"></select>
+                    <input type="number" ng-model="item.quantidade" placeholder="Quantidade" class="input-small">
+                    <button class="btn btn-primary" ng-click="adicionaItem()">adicionar ítem</button>
+                </form>
+            </div>
+        </div>
     </body>
 </html>

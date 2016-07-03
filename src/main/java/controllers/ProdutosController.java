@@ -1,13 +1,8 @@
 package controllers;
 
-import conexao.Conexao;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import dao.ProdutoDAO;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -22,79 +17,53 @@ import model.Produtos;
 
 /**
  * @author Wes
+ * Classe Resource (Utilizei o nome controller, não confundir com o Controller Java)
+ * Classe que vai conter os dados de acesso aos metodos REST do webservice
  */
 @Path("produtos") //Path define o URL do recurso
 public class ProdutosController {
 
-    //Realizando a conexão com a base
-    //Connection con = new Conexao().getConexao();
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/listarTodos")//caminho        
+    //@Produces("application/json")
+    public List<Produtos> listarProdutos() throws SQLException { //Retorna o "Bean"/Model
+        return ProdutoDAO.getInstance().listarProdutos();
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/")//caminho        
-    public List<Produtos> listarProdutos() { //Retorna o "Bean"/Model
-        List<Produtos> produtos = new ArrayList();
-        Produtos c1 = new Produtos(1, "Cerveja", 50);
-        Produtos c2 = new Produtos(2, "Miojo", 60);
-        Produtos c3 = new Produtos(3, "Pizza", 70);
-        Produtos c4 = new Produtos(4, "Cocacola", 80);
-        produtos.add(c1);
-        produtos.add(c2);
-        produtos.add(c3);
-        produtos.add(c4);
-        return produtos;
+    @Path("/buscar/{nomeProduto}")
+    public Produtos getProdutos(@PathParam("nomeProduto") String nomeProduto) throws SQLException {
+        return ProdutoDAO.getInstance().buscarProdutos(nomeProduto);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{codProduto}/")
-    public Produtos getProdutos(@PathParam("codProduto") int codProduto) {
-        Produtos p = new Produtos(codProduto, null, codProduto);
-        return p;
+    public Produtos getProdutosByID(@PathParam("codProduto") int codProduto) throws SQLException {
+        return ProdutoDAO.getInstance().buscarProdutosByID(codProduto);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON) //Consumes - Recebe
-    @Path("/")
-    public Response inserirProduto(Produtos produto) {
-//        //Retorna um response com mensagem de sucesso ou erro
-//        try {
-//            String sql = "insert into produto (nomeProduto,valor"
-//                    + ",imagem)"
-//                    + "values (?,?,?)";
-//            //Não inserir codProduto, por ser um autoincrement
-//            PreparedStatement preparedStatement = con.prepareStatement(sql);
-//            preparedStatement.setString(1, produto.getNomeProduto());
-//            preparedStatement.setDouble(2, produto.getValor());
-//            preparedStatement.setString(3, produto.getImagem());
-//            preparedStatement.execute();
-//
-//            System.out.println(produto.toString());
-//
-//        } catch (SQLException ex) {
-//            Logger lgr = Logger.getLogger(Conexao.class.getName());
-//            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-//        }
-        return Response.status(Response.Status.OK).build();
+    @Path("/cadastrar")
+    public Response inserirProduto(Produtos produto) throws SQLException {
+        return ProdutoDAO.getInstance().inserirProduto(produto);
     }
-
-    ;
     
     @PUT //Para Update
     @Consumes(MediaType.APPLICATION_JSON) //Consumes - Recebe
-    @Path("/")
-    public Response alterarProduto(Produtos produto) {
+    @Path("/atualizar")
+    public Response alterarProduto(Produtos produto) throws SQLException {
         //Retorna um response com mensagem de sucesso ou erro
-        System.out.println(produto.toString());
-        return Response.status(Response.Status.OK).build();
+        return ProdutoDAO.getInstance().alterarProduto(produto);
     }
-
-    ;
     
     @DELETE
     @Path("{codProduto}")
-    public Response deletarProduto(@PathParam("codProduto") int codProduto) {
+    public Response deletarProduto(@PathParam("codProduto") int codProduto) throws SQLException {
         System.out.println("Deletando");
-        return Response.status(Response.Status.OK).build();
+        return ProdutoDAO.getInstance().deletarProduto(codProduto);
     }
 }

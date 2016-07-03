@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html ng-app="CadastroLista">
+    <head>
+       	<title>Lista de compras com AngularJS</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="res/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="res/bootstrap/css/lista-compras.css">
+        <link rel="stylesheet" href="res/bootstrap/css/gh-buttons.css">
+        <script src="res/bootstrap/js/jquery-2.1.4.min.js"></script>
+
+        <!-- Documentação do Datatable http://l-lin.github.io/angular-datatables/archives/v0.4.x/#/angularWay -->
+        <script src="res/bootstrap/js/jquery.dataTables.min.js"></script>
+        <link href="http://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+        <script src="res/bootstrap/js/angular.min.js"></script>
+        <script src="res/bootstrap/js/angular-datatables.min.js"></script>
+        <!-- Deixar por Ultimo o js do angular-->
+        <script src="res/bootstrap/js/lista-compras.js"></script>
+    </head>
+    <body>
+        <div class="container" align="center" ng-controller="ListaCadastradas as controller">
+            <div class="row">
+                <div class="page-header">
+                    <h1>Lista de compras</h1>
+                </div>
+            </div>
+            
+            <div class-row>
+                <button class="button icon home" onclick="location.href='principal.html';" >Ínicio</button>
+                <button class="button add icon add" ng-click="controller.novo()">Nova Lista</button>
+                <br><br>
+            </div>
+            
+            <div style="border: 1px solid black;"  ng-show="controller.lista"> 
+                <h1>Adicionando uma nova Lista</h1>
+                <br><br>
+
+                <form name="formNovaLista" ng-submit="submitForm()" novalidate>
+                    <!--Validação do formulario-->
+
+                    <div class="form-group" ng-class="{ 'has-error' : formNovaLista.nome.$invalid && !formNovaLista.nome.$pristine }">
+                        <label for="nomeLista">Nome da Lista</label>
+                        <input type="text" name="nome" class="form-group" placeholder="Nome da Lista" id="nomeLista" ng-model="controller.lista.nomeLista" required>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit"  class="button  icon approve"  data-ng-click="controller.adicionaLista()">Salvar</button>
+                        <button type="button"  class="button"  data-ng-click="controller.lista = undefined">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+            
+            
+            <div style="border: 1px solid black;" data-ng-show="!controller.lista"  class="table-responsive">
+                <table id="lista-compras" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nome da Lista</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="lista in listas">
+                            <td><strong>{{ lista.nomeLista}}</strong></td>
+                            <td align="center">
+                                <a href="#button" class="button edit icon edit"
+                                                  data-ng-click="controller.alterar(lista)" >Alterar</a>
+                                <a href="#button" class="button danger icon remove"
+                                   data-ng-click="controller.excluir(lista)" >Remover</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
