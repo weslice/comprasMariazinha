@@ -1,5 +1,6 @@
 angular.module("Lista", ['datatables'])//[] = Conjunto de modulos a importar
-    .value('urlBase', 'http://localhost:8080/comprasMariazinha/resources/')
+    //.value('urlBase', 'http://localhost:8080/comprasMariazinha/resources/')
+    .value('urlBase', 'http://teste-vianuvem.rhcloud.com/comprasMariazinha/resources/')
     .controller("ListaComprasController", function ($http, urlBase, $scope) {
        
  var self = this;

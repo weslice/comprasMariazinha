@@ -1,14 +1,8 @@
 angular.module("Produtos", ['datatables'])//[] = Conjunto de modulos a importar
-    .value('urlBase', 'http://localhost:8080/comprasMariazinha/resources/')
+    //.value('urlBase', 'http://localhost:8080/comprasMariazinha/resources/')
+    .value('urlBase', 'http://teste-vianuvem.rhcloud.com/comprasMariazinha/resources/')
     .controller("ProdutosController", function ($http, urlBase, $scope) {
        
-        //Configurando tabela com AngularJS e Datatable
-        $(document).ready( function() {
-            $('#lista-produtos').dataTable();
-        } );
-
-        
-        
         var self = this;
         self.produtos = []; //Lista de Array que vai retornar os produtos
         self.produto = undefined; //Deixando indefinido de inicio
@@ -95,6 +89,13 @@ angular.module("Produtos", ['datatables'])//[] = Conjunto de modulos a importar
         };
         self.activate(); //Ativar sempre e atualizar
 
+
+//        //Configurando tabela com AngularJS e Datatable
+//        $(document).ready( function() {
+//            $('#lista-produtos').dataTable();
+//        } );
+
+        
 
     }); //Fim do Arquivo
 

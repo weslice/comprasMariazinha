@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javax.ws.rs.core.Response;
 import model.Lista;
 import model.ListasProdutos;
-import model.Produtos;
 
 /**
  * Classe responsável por conter os metodos do CRUD
@@ -43,7 +42,7 @@ public class ListaDAO extends Conexao {
         ResultSet rs = null;
         ArrayList<Lista> listaA = new ArrayList();
         try {
-            String sql = "select codLista, nomeLista from lista";
+            String sql = "select codLista, nomeLista from Lista";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -71,7 +70,7 @@ public class ListaDAO extends Conexao {
         Lista lista = new Lista();
         try {
             if (!"".equals(nomeLista)) {
-                String sql = "select codLista,nomeLista from lista where nomeLista like = %?%";
+                String sql = "select codLista,nomeLista from Lista where nomeLista like = %?%";
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setString(1, nomeLista);
                 rs = preparedStatement.executeQuery();
@@ -100,7 +99,7 @@ public class ListaDAO extends Conexao {
         Lista lista = new Lista();
         try {
             if (codLista > 0) {
-                String sql = "select codLista,nomeLista from lista where codLista = ? ";
+                String sql = "select codLista,nomeLista from Lista where codLista = ? ";
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setInt(1, codLista);
                 rs = preparedStatement.executeQuery();
@@ -130,7 +129,7 @@ public class ListaDAO extends Conexao {
                     //                    + " c.valorTotal,"
                     + " c.situacao,"
                     + " (a.valor * c.quantidadeProd) as valorTotal"
-                    + " FROM lista b, produto a, ListasProdutos c"
+                    + " FROM Lista b, Produto a, ListasProdutos c"
                     + " WHERE c.Lista_codLista = b.codLista "
                     + " AND  c.Produto_codProduto = a.codProduto"
                     + " AND  c.Lista_codLista = ?";
@@ -201,7 +200,7 @@ public class ListaDAO extends Conexao {
         Connection con = new Conexao().getConexao();
 
         try {
-            String sql = "insert into lista (nomeLista)"
+            String sql = "insert into Lista (nomeLista)"
                     + "values (?)";
             //Não inserir codProduto, por ser um autoincrement
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -222,7 +221,7 @@ public class ListaDAO extends Conexao {
         try {
             if ((codProduto > 0)
                     && (codLista > 0)) {
-                String sql = "delete from ListasProdutos where produto_CodProduto = ? and Lista_codLista = ? ";
+                String sql = "delete from ListasProdutos where Produto_CodProduto = ? and Lista_codLista = ? ";
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setInt(1, codProduto);
                 preparedStatement.setInt(2, codLista);
@@ -245,7 +244,7 @@ public class ListaDAO extends Conexao {
 
         try {
             if (!"".equals(lista.getNomeLista())) {
-                String sql = "update lista set nomeLista= ? where codLista = ? ";
+                String sql = "update Lista set nomeLista= ? where codLista = ? ";
 
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setString(1, lista.getNomeLista());
@@ -268,7 +267,7 @@ public class ListaDAO extends Conexao {
         Connection con = new Conexao().getConexao();
         try {
             if (codLista > 0) {
-                String sql = "delete from lista where codLista= ?";
+                String sql = "delete from Lista where codLista= ?";
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setInt(1, codLista);
                 preparedStatement.execute();

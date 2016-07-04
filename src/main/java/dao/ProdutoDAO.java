@@ -41,7 +41,7 @@ public class ProdutoDAO extends Conexao {
         ResultSet rs = null;
         ArrayList<Produtos> produtos = new ArrayList();
         try {
-            String sql = "select * from produto";
+            String sql = "select * from Produto";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -66,7 +66,7 @@ public class ProdutoDAO extends Conexao {
         ArrayList<Produtos> produtos = new ArrayList();
         try {
             String sql = "select a.codProduto, a.nomeProduto, a.valor, a.imagem "
-                    + " FROM produto a "
+                    + " FROM Produto a "
                     + " WHERE a.codProduto not in(select Produto_codProduto from ListasProdutos where Lista_codLista = ?);";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setInt(1, codLista);
@@ -97,7 +97,7 @@ public class ProdutoDAO extends Conexao {
         Produtos produto = new Produtos();
         try {
             if (!"".equals(nomeProduto)) {
-                String sql = "select codProduto,nomeProduto,valor,imagem from produto where nomeProduto like = %?%";
+                String sql = "select codProduto,nomeProduto,valor,imagem from Produto where nomeProduto like = %?%";
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setString(1, nomeProduto);
                 rs = preparedStatement.executeQuery();
@@ -128,7 +128,7 @@ public class ProdutoDAO extends Conexao {
         Produtos produto = new Produtos();
         try {
             if (codProduto > 0) {
-                String sql = "select codProduto,nomeProduto,valor,imagem from produto where codProduto = ?";
+                String sql = "select codProduto,nomeProduto,valor,imagem from Produto where codProduto = ?";
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setInt(1, codProduto);
                 rs = preparedStatement.executeQuery();
@@ -158,7 +158,7 @@ public class ProdutoDAO extends Conexao {
         Connection con = new Conexao().getConexao();
 
         try {
-            String sql = "insert into produto (nomeProduto,valor"
+            String sql = "insert into Produto (nomeProduto,valor"
                     + ",imagem)"
                     + "values (?,?,?)";
             //Não inserir codProduto, por ser um autoincrement
@@ -182,7 +182,7 @@ public class ProdutoDAO extends Conexao {
         Connection con = new Conexao().getConexao();
         try {
             if (codProduto > 0) {
-                String sql = "delete from produto where codProduto= ?";
+                String sql = "delete from Produto where codProduto= ?";
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setInt(1, codProduto);
                 preparedStatement.execute();
@@ -204,7 +204,7 @@ public class ProdutoDAO extends Conexao {
 
         try {
             if (produto != null) {
-                String sql = "update produto set nomeProduto = ? ,valor = ? ,imagem = ?"
+                String sql = "update Produto set nomeProduto = ? ,valor = ? ,imagem = ?"
                         + " where codProduto = ?";
 
                 PreparedStatement preparedStatement = con.prepareStatement(sql);

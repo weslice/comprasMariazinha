@@ -22,7 +22,8 @@ app.service('sharedVar', function () {
     }
 });
     
-app.value('urlBase', 'http://localhost:8080/comprasMariazinha/resources/')
+//app.value('urlBase', 'http://localhost:8080/comprasMariazinha/resources/')
+app.value('urlBase', 'http://teste-vianuvem.rhcloud.com/comprasMariazinha/resources/')
 app.controller("ListaComprasController", function ($http, urlBase, $scope,sharedVar) {
        
     var self = this;
@@ -148,7 +149,8 @@ app.controller("ListaComprasController", function ($http, urlBase, $scope,shared
 
 //Parte que ira fazer a implmentação e requests com a Lista 
 //Responsavel por adicionar nova lista, alterar nome, acessar a lista, e excluir
-app.value('urlBase', 'http://localhost:8080/comprasMariazinha/resources/')
+//app.value('urlBase', 'http://localhost:8080/comprasMariazinha/resources/')
+app.value('urlBase', 'http://teste-vianuvem.rhcloud.com/comprasMariazinha/resources/')
 app.controller("ListaCadastradas", function ($http, urlBase, $scope,sharedVar,$window ) {
     
     var self = this;
