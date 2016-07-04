@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html ng-app="CadastroLista">
+<html ng-app="Lista">
     <head>
-       	<title>Lista de compras com AngularJS</title>
+       	<title>Listas</title>
         <meta charset="utf-8">
         <link rel="stylesheet" href="res/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" href="res/bootstrap/css/lista-compras.css">
@@ -31,8 +31,10 @@
                 <br><br>
             </div>
             
-            <div style="border: 1px solid black;"  ng-show="controller.lista"> 
-                <h1>Adicionando uma nova Lista</h1>
+            <div style="border: 1px solid black;" ng-show="controller.lista"> 
+                <div ng-show="controller.divNovo"><h1>Adicionando uma nova Lista</h1></div>
+                <div ng-show="controller.divAlterar"><h1>Alterando Lista</h1></div>
+                    
                 <br><br>
 
                 <form name="formNovaLista" ng-submit="submitForm()" novalidate>
@@ -42,6 +44,16 @@
                         <label for="nomeLista">Nome da Lista</label>
                         <input type="text" name="nome" class="form-group" placeholder="Nome da Lista" id="nomeLista" ng-model="controller.lista.nomeLista" required>
                     </div>
+
+                    <!--<div class="form-group">
+                        <label for="nomeLista">Quantidade</label>
+                        <input type="text" class="form-group" ng-model="controller.quantidade" required>
+                    </div>
+                    <div class="form-group" >
+                        <label for="nomeLista">Situacao</label>
+                        <input type="text" class="form-group" ng-model="controller.situacao" required>
+                    </div>
+                    -->
 
                     <div class="form-group">
                         <button type="submit"  class="button  icon approve"  data-ng-click="controller.adicionaLista()">Salvar</button>
@@ -60,9 +72,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="lista in listas">
+                        <tr ng-repeat="lista in controller.listas">
                             <td><strong>{{ lista.nomeLista}}</strong></td>
                             <td align="center">
+                                <a href="#button" class="button log icon log"
+                                   data-ng-click="controller.abrirLista(lista)" >Abrir</a>
                                 <a href="#button" class="button edit icon edit"
                                                   data-ng-click="controller.alterar(lista)" >Alterar</a>
                                 <a href="#button" class="button danger icon remove"
@@ -73,5 +87,9 @@
                 </table>
             </div>
         </div>
+        
+        
+      
+        
     </body>
 </html>

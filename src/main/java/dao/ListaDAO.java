@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Response;
 import model.Lista;
+import model.ListasProdutos;
 import model.Produtos;
 
 /**
@@ -70,7 +71,7 @@ public class ListaDAO extends Conexao {
         Lista lista = new Lista();
         try {
             if (!"".equals(nomeLista)) {
-                String sql = "select codLista,nomeLista where nomeLista like = %?%";
+                String sql = "select codLista,nomeLista from lista where nomeLista like = %?%";
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setString(1, nomeLista);
                 rs = preparedStatement.executeQuery();
@@ -93,13 +94,13 @@ public class ListaDAO extends Conexao {
      * @return Produto
      */
     public Lista buscarListaByID(int codLista) throws SQLException {
-         //Realizando a conexão com a base
+        //Realizando a conexão com a base
         Connection con = new Conexao().getConexao();
         ResultSet rs = null;
         Lista lista = new Lista();
         try {
             if (codLista > 0) {
-                String sql = "select codLista,nomeLista where codLista = ? ";
+                String sql = "select codLista,nomeLista from lista where codLista = ? ";
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setInt(1, codLista);
                 rs = preparedStatement.executeQuery();
@@ -118,14 +119,17 @@ public class ListaDAO extends Conexao {
         return lista;
     }
 
-    public ArrayList<Produtos> trazerProdutosPorListas (int codLista) throws SQLException{
+    public ArrayList<ListasProdutos> trazerProdutosPorListas(int codLista) throws SQLException {
         //Realizando a conexão com a base
         Connection con = new Conexao().getConexao();
         ResultSet rs = null;
-        ArrayList<Produtos> produtos = new ArrayList();
+        ArrayList<ListasProdutos> produtosInLista = new ArrayList();
         try {
-            String sql = "SELECT a.nomeProduto, a.valor,a.codProduto, b.codLista, "
-                    + " c.quantidadeProd, c.valorTotal, c.situacao "
+            String sql = "SELECT a.nomeProduto, a.valor as valorProduto,a.codProduto, b.codLista, "
+                    + " c.quantidadeProd as quantidade,"
+                    //                    + " c.valorTotal,"
+                    + " c.situacao,"
+                    + " (a.valor * c.quantidadeProd) as valorTotal"
                     + " FROM lista b, produto a, ListasProdutos c"
                     + " WHERE c.Lista_codLista = b.codLista "
                     + " AND  c.Produto_codProduto = a.codProduto"
@@ -133,10 +137,22 @@ public class ListaDAO extends Conexao {
             PreparedStatement preparedStatement = con.prepareStatement(sql);
             preparedStatement.setInt(1, codLista);
             rs = preparedStatement.executeQuery();
+            double totalizador = 0;
             while (rs.next()) {
-                Produtos produto = new Produtos(rs.getInt("codProduto"), rs.getString("nomeProduto"),
-                        rs.getDouble("valor"));
-                produtos.add(produto);
+                //(int lista_CodLista, String produto_CodProduto, int quantidade, double valorTotal, 
+                //double valorProduto, boolean situacao, String nomeProduto) 
+                ListasProdutos listasProdutos = new ListasProdutos(
+                        rs.getInt("codLista"),
+                        rs.getInt("codProduto"),
+                        rs.getInt("quantidade"),
+                        rs.getDouble("valorTotal"),
+                        rs.getDouble("valorProduto"),
+                        rs.getBoolean("situacao"),
+                        rs.getString("nomeProduto"),
+                        0);
+                totalizador = totalizador + rs.getDouble("valorTotal");
+                listasProdutos.setTotalizador(totalizador);
+                produtosInLista.add(listasProdutos);
             }
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(Conexao.class.getName());
@@ -144,29 +160,27 @@ public class ListaDAO extends Conexao {
         } finally {
             con.close();
         }
-        return produtos; //Retorna um Objeto!!
+        return produtosInLista; //Retorna um Objeto!!
     }
-    
+
     /**
      * @autor Wes Método para cadastrar um produto na lista
-     * @param produto
+     * @param listasProdutos
      */
-    public Response inserirProdutoNaLista(Produtos produto, Lista lista, int quantidade, int situacao) throws SQLException {
+    public Response inserirProdutoNaLista(ListasProdutos listasProdutos) throws SQLException {
         //Realizando a conexão com a base
         Connection con = new Conexao().getConexao();
 
-        double valorTotal = produto.getValor() * quantidade;
+        listasProdutos.setValorTotal(listasProdutos.getValorProduto() * listasProdutos.getQuantidade());
         try {
-            String sql = "insert into ListasProdutos(Lista_CodLista,Produto_CodProduto,quantidade,valorTotal,situacao)"
+            String sql = "insert into ListasProdutos(Lista_CodLista,Produto_CodProduto,quantidadeProd,valorTotal,situacao)"
                     + "values (?,?,?,?,?)";
-            //Não inserir codProduto, por ser um autoincrement
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setInt(1, lista.getCodLista());
-            preparedStatement.setInt(2, produto.getCodProduto());
-            preparedStatement.setInt(3, quantidade);
-            preparedStatement.setDouble(4, valorTotal);
-            preparedStatement.setDouble(5, situacao);
-            
+            preparedStatement.setInt(1, listasProdutos.getLista_CodLista());
+            preparedStatement.setInt(2, listasProdutos.getProduto_CodProduto());
+            preparedStatement.setInt(3, listasProdutos.getQuantidade());
+            preparedStatement.setDouble(4, listasProdutos.getValorTotal());
+            preparedStatement.setBoolean(5, listasProdutos.isSituacao());
             preparedStatement.execute();
 
         } catch (SQLException ex) {
@@ -177,6 +191,7 @@ public class ListaDAO extends Conexao {
         }
         return Response.status(Response.Status.OK).build();
     }
+
     /**
      * @autor Wes Método para cadastrar uma lista
      * @param produto
@@ -205,9 +220,9 @@ public class ListaDAO extends Conexao {
         //Realizando a conexão com a base
         Connection con = new Conexao().getConexao();
         try {
-            if ((codProduto > 0) 
+            if ((codProduto > 0)
                     && (codLista > 0)) {
-                String sql = "delete from ListasProdutos where produto_CodProduto = 2 and Lista_codLista = 1 ";
+                String sql = "delete from ListasProdutos where produto_CodProduto = ? and Lista_codLista = ? ";
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setInt(1, codProduto);
                 preparedStatement.setInt(2, codLista);
@@ -230,7 +245,7 @@ public class ListaDAO extends Conexao {
 
         try {
             if (!"".equals(lista.getNomeLista())) {
-                String sql = "update lista set nomeLista= ? , where codLista = ? ";
+                String sql = "update lista set nomeLista= ? where codLista = ? ";
 
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setString(1, lista.getNomeLista());
@@ -247,7 +262,7 @@ public class ListaDAO extends Conexao {
         }
         return Response.status(Response.Status.OK).build();
     }
-    
+
     public Response deletarLista(int codLista) throws SQLException {
         //Realizando a conexão com a base
         Connection con = new Conexao().getConexao();
@@ -269,4 +284,24 @@ public class ListaDAO extends Conexao {
         return Response.status(Response.Status.OK).build();
     }
 
+    public double sumValorTotal(int codLista) throws SQLException {
+        Connection con = new Conexao().getConexao();
+        ResultSet rs = null;
+        double totalizador = 0;
+        try {
+            String sql = "select sum(valorTotal) as totalizador from ListasProdutos where Lista_CodLista = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, codLista);
+            rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                totalizador = (rs.getDouble("totalizador"));
+            }
+        } catch (SQLException ex) {
+            Logger lgr = Logger.getLogger(Conexao.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            con.close();
+        }
+        return totalizador;
+    }
 }

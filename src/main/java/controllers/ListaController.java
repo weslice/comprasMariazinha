@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.Lista;
+import model.ListasProdutos;
 import model.Produtos;
 
 /**
@@ -56,19 +57,16 @@ public class ListaController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/buscarProdutoLista/{codLista}/")
-    public ArrayList<Produtos> trazerProdutosPorListas(@PathParam("codLista") int codLista) throws SQLException {
+    public ArrayList<ListasProdutos> trazerProdutosPorListas(@PathParam("codLista") int codLista) throws SQLException {
         return ListaDAO.getInstance().trazerProdutosPorListas(codLista);
     }
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON) //Consumes - Recebe
-    @Path("/inserirProdutoLista/{quantidade}/{situacao}")
-    public Response inserirProdutoNaLista(Produtos produto, Lista lista,
-            @PathParam("quantidade") int quantidade,
-            @PathParam("situacao") int situacao
-            ) throws SQLException {
-        //Produtos produto, Lista lista, int quantidade, int situacao
-        return ListaDAO.getInstance().inserirProdutoNaLista(produto, lista, quantidade, situacao);
+    @Path("/inserirProdutoLista/")
+    public Response inserirProdutoNaLista(ListasProdutos listasProdutos) throws SQLException {
+        return ListaDAO.getInstance().inserirProdutoNaLista(listasProdutos);
+        
     }
     
     @POST
@@ -94,5 +92,18 @@ public class ListaController {
         return ListaDAO.getInstance().deletarLista(codLista);
     }
     
+    @DELETE
+    @Path("/deletarProLista/{codProduto}/{codLista}")
+    public Response deletarProdutoDaLista(@PathParam("codProduto") int codProduto, @PathParam("codLista") int codLista) throws SQLException {
+        System.out.println("Deletando");
+        return ListaDAO.getInstance().deletarProdutoDaLista(codProduto,codLista);
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/sumValorTotal/{codLista}/")
+    public double sumValorTotal(@PathParam("codLista") int codLista) throws SQLException {
+        return ListaDAO.getInstance().sumValorTotal(codLista);
+    }
     
 }

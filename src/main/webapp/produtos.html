@@ -36,7 +36,9 @@
 
             <!--Caso o produto não existir/estiver disponivel, não ira exibir a div -->
             <div style="border: 1px solid black;"  ng-show="controller.produto"> 
-                <h2>Adicionando um novo Produto</h2>
+                <div ng-show="controller.divNovo"><h1>Adicionando um novo Produto</h1></div>
+                <div ng-show="controller.divAlterar"><h1>Alterando Produto</h1></div>
+                
                 <br><br>
 
                 <form name="formNovoProd" ng-submit="submitForm()" novalidate>
@@ -85,7 +87,9 @@
                 </table>
                 <h4>Total de Produtos: {{ controller.produtos.length}}</h4>
                 <br>
+                <!--
                 <select  class="form-control" ng-model="produto" ng-options="produto.nomeProduto for produto in controller.produtos track by produto.codProduto"></select>
+                -->
             </div>
 
         </div>

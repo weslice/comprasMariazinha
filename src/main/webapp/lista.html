@@ -18,42 +18,63 @@
         <script src="res/bootstrap/js/lista-compras.js"></script>
     </head>
     <body>
-        <div class="container" ng-controller="ListaComprasController as controller">
-            <div class="row">
+        <div class="container" align ="center" ng-controller="ListaComprasController as controller">
+            <div class="row" >
                 <div class="page-header">
-                    <h1>Lista</h1>
+                    <h1>{{controller.listaNome}}</h1>
                 </div>
             </div>
             
             <div class-row>
+                <button class="button icon arrowleft" onclick="location.href='listaCompras.html';" >Voltar</button>
                 <button class="button icon home" onclick="location.href='principal.html';" >Ínicio</button>
-                <button class="button add icon add" ng-click="controller.novo()">Nova Lista</button>
                 <br><br>
             </div>
 
-            <div class="row">
+              <div style="border: 1px solid black;"  class="table-responsive">
                 <table id="lista-compras" class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Comprado?</th>
-                            <th>Produto</th>
-                            <th>Quantidade</th>
+                            <th class="text-center">Comprado?</th>
+                            <th class="text-center">Produto</th>
+                            <th class="text-center">Quantidade</th>
+                            <th class="text-center">Valor Un</th>
+                            <th class="text-center">Valor Tot</th>
+                            <th class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in itens" class="comprado-{{ item.comprado }}">
-                            <td><input type="checkbox" ng-model="item.comprado"></td>
-                            <td><strong>{{ item.produto }}</strong></td>
-                            <td>{{ item.quantidade }}</td>
+                        <tr ng-repeat="produto in controller.produtosInLista" class="comprado-{{ produto.situacao }}">
+                            <td align="center"><input type="checkbox" ng-model="produto.situacao"></td>
+                            <td align="left"><strong>{{ produto.nomeProduto }}</strong></td>
+                            <td align="center">{{ produto.quantidade }}</td>
+                            <td align="right">R$: {{ produto.valorProduto}}</td>
+                            <td align="right">R$: {{ produto.valorTotal}}</td>
+                            <td align="center"><a href="" class="button danger icon remove"
+                                   data-ng-click="controller.excluirProdLista(produto)" ></a>
+                            </td>
                         </tr>
                     </tbody>
+                    
+                        <tr>
+                            <td class="colunavalor" colspan="6">Valor Total R$: {{ controller.totalizador}}</td>
+                        </tr>
                 </table>
+                
             </div>
+            
             <div class="row">
-                <form class="form-inline" name="formItem">
-                    <select  class="form-control" ng-model="produto" ng-options="produto.nomeProduto for produto in controller.produtos track by produto.codProduto"></select>
-                    <input type="number" ng-model="item.quantidade" placeholder="Quantidade" class="input-small">
-                    <button class="btn btn-primary" ng-click="adicionaItem()">adicionar ítem</button>
+                Adicionar Produto na Lista
+            </div><br>
+            <div class="row">
+                <form class="form-inline" name="formProduto">
+                    Produto:
+                    <select  class="form-control"
+                             ng-model="controller.produto" 
+                             ng-options="produto.nomeProduto for produto in controller.produtos track by produto.codProduto">
+                    </select>
+                        <input type="number" class="form-control2" ng-model="controller.quantidade" placeholder="Quantidade">
+                    <button class="button add icon add " data-ng-click="controller.adicionarProduto()"></button>
                 </form>
             </div>
         </div>

@@ -1,10 +1,14 @@
 #lista-compras {
-	width: 460px;
+	width: auto;
 }
-#lista-compras td, #lista-compras th {
+/*#lista-compras td, #lista-compras th {
 	text-align: center;
-}
+}*/
 .comprado-true {
 	text-decoration: line-through;
 	color: red;
+}
+.colunavalor{
+    text-align:right;
+    color:blue;
 }

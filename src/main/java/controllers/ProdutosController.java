@@ -33,6 +33,13 @@ public class ProdutosController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/listarProdLista/{codLista}")//caminho        
+    public List<Produtos> listarProdutosLista(@PathParam("codLista") int codLista) throws SQLException { //Retorna o "Bean"/Model
+        return ProdutoDAO.getInstance().listarProdutosLista(codLista);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/buscar/{nomeProduto}")
     public Produtos getProdutos(@PathParam("nomeProduto") String nomeProduto) throws SQLException {
         return ProdutoDAO.getInstance().buscarProdutos(nomeProduto);

@@ -58,6 +58,33 @@ public class ProdutoDAO extends Conexao {
         }
         return produtos; //Retorna um Objeto!!
     }
+    
+    public ArrayList<Produtos> listarProdutosLista(int codLista) throws SQLException {
+        //Realizando a conexão com a base
+        Connection con = new Conexao().getConexao();
+        ResultSet rs = null;
+        ArrayList<Produtos> produtos = new ArrayList();
+        try {
+            String sql = "select a.codProduto, a.nomeProduto, a.valor, a.imagem "
+                    + " FROM produto a "
+                    + " WHERE a.codProduto not in(select Produto_codProduto from ListasProdutos where Lista_codLista = ?);";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, codLista);
+            rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                //public Produtos(int codProduto, String nomeProduto, double valor) {
+                Produtos produto = new Produtos(rs.getInt("codProduto"), rs.getString("nomeProduto"),
+                        rs.getDouble("valor"));
+                produtos.add(produto);
+            }
+        } catch (SQLException ex) {
+            Logger lgr = Logger.getLogger(Conexao.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            con.close();
+        }
+        return produtos; //Retorna um Objeto!!
+    }
 
     /**
      * @autor Wes Método para buscar produto por nome

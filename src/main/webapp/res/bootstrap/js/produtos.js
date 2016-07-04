@@ -10,14 +10,18 @@ angular.module("Produtos", ['datatables'])//[] = Conjunto de modulos a importar
         
         
         var self = this;
-        self.produtos = [] //Lista de Array que vai retornar os produtos
+        self.produtos = []; //Lista de Array que vai retornar os produtos
         self.produto = undefined; //Deixando indefinido de inicio
-        
+        self.divNovo=false;
+        self.divAterar=false;
+    
         //Dar um novo na Página para inserir os dados via input.
         //O produto passa a existir
         self.novo = function(){
             self.produto = {}; //É igual a um objeto vazio, deixando de ser
-        //Undefined, para assim exibir a div no produtos.html para poder inserir
+            //Undefined, para assim exibir a div no produtos.html para poder inserir
+            self.divNovo=true;
+            self.divAlterar=false;
         };
        
         //Salvar
@@ -42,6 +46,7 @@ angular.module("Produtos", ['datatables'])//[] = Conjunto de modulos a importar
                     self.ocorreuErro();
                 });
             } else{
+                //Tratamento de aviso que deu erro
             }
         };
        
@@ -49,6 +54,8 @@ angular.module("Produtos", ['datatables'])//[] = Conjunto de modulos a importar
         //ira tornar visivel a div de alterar, e deixar o produto defined
         self.alterar = function(produto){
             self.produto = produto //Atribuindo o produto selecionado
+            self.divNovo=false;
+            self.divAlterar=true;
         };
         
         self.excluir = function(produto){
